@@ -26,20 +26,20 @@ jobs:
       - name: Verificar CSS
         run: |
           if [ ! -f src/css/style.css ]; then
-            echo "CSS não encontrado no caminho correto"
+            echo "CSS não encontrado"
             exit 1
           fi
 
       - name: Instalar HTMLHint
         run: npm install -g htmlhint
 
-      - name: Rodar HTMLHint
+      - name: Lint HTML
         run: htmlhint src/index.html
 
-      - name: Footer obrigatório
+      - name: Verificar footer obrigatório
         run: |
           if ! grep -qi "Roberta Ferreira Antunes" src/index.html; then
-            echo "Footer obrigatório não encontrado"
+            echo "Footer obrigatório ausente"
             exit 1
           fi
 
