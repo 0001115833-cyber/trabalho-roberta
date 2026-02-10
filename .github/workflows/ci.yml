@@ -2,30 +2,37 @@ name: CI-Qualidade
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   audit:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Verificar pasta src
-        run: test -d src
+        run: |
+          if [ ! -d src ]; then
+            echo "Pasta src não encontrada"
+            exit 1
+          fi
 
       - name: Verificar CSS
-        run: test -f src/css/style.css
+        run: |
+          if [ ! -f src/css/style.css ]; then
+            echo "CSS não encontrado no caminho correto"
+            exit 1
+          fi
 
-      - name: HTMLHint
-        uses: Cyb3r-Jak3/htmlhint-action@v1
-        with:
-          target_pattern: "src/index.html"
+      - name: Instalar HTMLHint
+        run: npm install -g htmlhint
+
+      - name: Rodar HTMLHint
+        run: htmlhint src/index.html
 
       - name: Footer obrigatório
-        run: grep -q "<footer>Roberta Ferreira Antunes</footer>" src/index.html
-
-      - name: Mensagem final
-        run: echo "O código do aluno Roberta Ferreira Antunes foi auditado, está seguindo as normas corretas e está pronto para o deploy!"
+        run
