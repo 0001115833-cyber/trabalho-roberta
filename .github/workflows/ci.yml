@@ -1,0 +1,31 @@
+name: CI-Qualidade
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  qualidade:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verificar pasta src
+        run: test -d src
+
+      - name: Verificar CSS no local correto
+        run: test -f src/css/style.css
+
+      - name: Verificar footer obrigatório
+        run: grep -q "<footer>Roberta Ferreira Antunes</footer>" src/index.html
+
+      - name: HTMLHint
+        uses: Cyb3r-Jak3/htmlhint-action@v1
+        with:
+          target_pattern: "src/index.html"
+
+      - name: Relatório final
+        run: echo "O código do aluno Roberta Ferreira Antunes foi auditado, está seguindo as normas corretas e está pronto para o deploy!"
