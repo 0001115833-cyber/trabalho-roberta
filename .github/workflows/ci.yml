@@ -2,9 +2,11 @@ name: CI-Qualidade
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   audit:
@@ -35,4 +37,11 @@ jobs:
         run: htmlhint src/index.html
 
       - name: Footer obrigatório
-        run
+        run: |
+          if ! grep -qi "Roberta Ferreira Antunes" src/index.html; then
+            echo "Footer obrigatório não encontrado"
+            exit 1
+          fi
+
+      - name: Mensagem final
+        run: echo "O código do aluno Roberta Ferreira Antunes foi auditado, está seguindo as normas corretas e está pronto para o deploy!"
